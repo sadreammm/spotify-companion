@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{track_info['track_name']}}
+{% endblock %}
+
+{% block h1 %}
+    {{display_name}}
+{% endblock %}
+    
+{% block main %}
+    <table border="0" class="track">
+        <tr>
+            <td>
+                <img src="{{track_info['track_image']}}" height="300" width="300">
+            </td>
+            <td class="hidden" width="2%"></td>
+            <td class="screen" width="65%">
+                <h1><b>{{track_info['track_name']}}</b></h1>
+                <h3>{{track_info['artist_name']}}</h3>
+                {% if track_info['feat_name'] != [] %}
+                    <h4> Features: {{', '.join(track_info['feat_name'])}}</h4>
+                {% endif %}
+                {% if track_info['album_type'] == "album" %}
+                    <h4>Album: <b>{{track_info['album_name']}}</b></h4>
+                {% else %}
+                    <h4><b>Single</b></h4>
+                {% endif %}
+                <h5>{{track_info['release_date']}}</h5>
+            </td>
+            <td class="align-right">
+                <button class="addToPlaylistBtn" data-track-uri="{{ track_info['track_uri'] }}">Add to playlist</button>
+            </td>
+        </tr>
+        <tr>
+            <td class="media mt-4">
+                <h1><b>{{track_info['track_name']}}</b></h1>
+                <h3>{{track_info['artist_name']}}</h3>
+                {% if track_info['album_type'] == "album" %}
+                    <h4><b>{{track_info['album_name']}}</b></h4>
+                {% else %}
+                    <h4><b>Single</b></h4>
+                {% endif %}
+                <h5>{{track_info['release_date']}}</h5>
+                <button class="addToPlaylistBtn" data-track-uri="{{ track_info['track_uri'] }}">Add to playlist</button>
+            </td>
+        </tr>
+    </table>
+    <div class="notification" id="notification"></div>
+
+    <div class="mt-4 text-center">
+        <h1 style="font-size: 50px;"><b>Lyrics</b></h1>
+        <div class="lyrics">
+            <pre>{{track_info['lyrics']}}</pre>
+        </div>
+    </div>
+
+    <div class="modal" id="myModal">
+        <div class="modal-content">
+            <div class="bar">
+                <h2>Select a playlist</h2>
+                <span class="close">&times;</span>
+            </div>
+            <form id="addPlaylistForm" action="/add-playlist" method="post">
+                <input type="hidden" name="track_uri" value="{{track_info['track_uri']}}" id="trackUriInput">
+                <select name="playlist_id" class="select-playlist" required>
+                    <option selected="true" disabled >Select Playlist</option>
+                    {% for playlist in playlists %}
+                        <option value="{{playlist['playlist_id']}}">{{playlist['playlist_name']}}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Add</button>
+            </form>
+        </div>
+    </div>
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <div class="bar">
+                <h2>Track already exists in playlist</h2>
+                <span class="close">&times;</span>
+            </div>
+            <form id="confirmAddTrack" action="/confirm-add" method="post">
+                <input type="hidden" name="track_uri" >
+                <input type="hidden" name="playlist_id">
+                <button type="submit">Add Anyway</button>
+                <button type="button" id="cancelBtn">Cancel</button>
+            </form>
+        </div>
+    </div>
+    <script src="{{url_for('static', filename='script.js')}}"></script>
+{% endblock %}

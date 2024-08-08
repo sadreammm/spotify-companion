@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block h1 %}
+    {{display_name}}
+{% endblock %}
+    
+{% block main %}
+
+    <form action="/songs" method="post" class="mb-5 text-center" id="searchInput">
+        <input type="text" name="track" class="form-control-lg search" placeholder="Search for songs">
+        <button type="submit" hidden></button>
+    </form>
+    {% if track['is_playing'] %}
+        <table border="0" class="currently-playing">
+            <tr>
+                <td>
+                    <img src="{{track['track_image']}}" width="300" height="300">
+                </td>
+                <td class="hidden" width="30"></td>
+                <td class="screen">
+                    <h1><b>{{track['track_name']}}</b></h1>
+                    <h4>Album: <b>{{track['album_name']}}</b></h4>
+                    <h3>{{', '.join(track['artist_name'])}}</h3>
+                </td>
+            </tr>
+            <tr>
+                <td class="media mt-4">
+                    <h1><b>{{track['track_name']}}</b></h1>
+                    <h4><b>{{track['album_name']}}</b></h4>
+                    <h3>{{', '.join(track['artist_name'])}}</h3>
+                </td>
+            </tr>
+        </table>
+        <div class="mt-4 text-center">
+            <h1 style="font-size: 50px;"><b>Lyrics</b></h1>
+            <div class="lyrics">
+                <pre>{{track['lyrics']}}</pre>
+            </div>
+        </div>
+    {% else %}
+        <div class="not-playing">
+            <h1><b>Nothing Currently Playing...</b></h1>
+        </div>
+        
+    {% endif %}
+    <script>
+        function refresh() {
+            window.location.reload();
+        }
+        setInterval(refresh, 10000);
+
+        var search = document.getElementById("searchInput");
+        search.addEventListener('focus',function(){
+            search.classList.add("active");
+        });
+        search.addEventListener('blur', function(){
+            search.classList.remove("active");
+        });
+    </script>
+{% endblock %}

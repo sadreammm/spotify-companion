@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    My Playlists
+{% endblock %}
+
+{% block h1 %}
+    {{display_name}}
+{% endblock %}
+    
+{% block main %}
+    <ul class="playlist-list">   
+        {% for playlist in playlists %}
+        <div class="playlist" data-track-id="{{ playlist['playlist_id'] }}">
+            <li>
+                <table class="playlist-info mb-5">
+                    <tr>
+                        <td>
+                            {% if playlist['playlist_image'] != none %}
+                                <img src="{{ playlist['playlist_image'] }}" alt="Playlist image" width="230" height="230">
+                            {% else %}
+                                <img src="/static/images/default.png" width="230" height="230">
+                            {% endif %}
+                        </td>
+                        <td class="hidden" width="20"></td>
+                        <td class="screen">
+                            <h1><b>{{ playlist['playlist_name'] }}</b></h1>
+                            <h3>{{playlist['description']}}</h3>
+                            <h4>{{playlist['total_tracks']}} songs</h4>
+                            <div class="owner">
+                                <h4> by {{ playlist['owner_name'] }}</h4>
+                                <img src="{{playlist['owner_image']}}" width="60" height="60">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="media mt-4">
+                            <h1><b>{{ playlist['playlist_name'] }}</b></h1>
+                            <h2>{{playlist['description']}}</h2>
+                            <h3> by {{ playlist['owner_name'] }}</h3>
+                        </td>
+                    </tr>
+                </table>
+            </li>
+        </div>
+    {% endfor %}
+    </ul>
+    <script src="{{url_for('static', filename='script.js')}}"></script>
+{% endblock %}

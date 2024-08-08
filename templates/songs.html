@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Search
+{% endblock %}
+
+{% block h1 %}
+    {{display_name}}
+{% endblock %}
+    
+{% block main %} 
+    <form action="/songs" method="post" class="mb-5 text-center" id="searchInput">
+        <input type="text" name="track" class="form-control-lg search" placeholder="Search for songs">
+        <button type="submit" hidden></button>
+    </form>
+    {% for track in tracks %}
+    <div class="songs-menu mb-1">
+        <div class="songs mb-1" data-track-id="{{ track['id'] }}">
+            <table border="0" class="song">
+                <tr>
+                    <td>
+                        <img src="{{ track['track_image'] }}" alt="Track image" width="200" height="200">
+                    </td>
+                    <td class="hidden" width="2%"></td>
+                    <td width="80%">
+                        <h1><b>{{ track['name'] }}</b></h1>
+                        <h3>{{ track['artist'] }}</h3>
+                        <div class="media">
+                            <button class="addToPlaylistBtn" data-track-uri="{{ track['uri'] }}">Add to playlist</button>
+                        </div>
+                    </td>
+                    <td class="align-right">
+                        <button class="addToPlaylistBtn" data-track-uri="{{ track['uri'] }}">Add to playlist</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    {% endfor %}
+    <div class="notification" id="notification"></div> 
+    <div class="modal" id="myModal">
+        <div class="modal-content">
+            <div class="bar">
+                <h2>Select a playlist</h2>
+                <span class="close">&times;</span>
+            </div>
+            <form id="addPlaylistForm" action="/add-playlist" method="post">
+                <input type="hidden" name="track_uri" id="trackUriInput">
+                <select name="playlist_id" class="select-playlist" required>
+                    <option selected="true" disabled >Select Playlist</option>
+                    {% for playlist in playlists %}
+                        <option value="{{playlist['playlist_id']}}">{{playlist['playlist_name']}}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Add</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <div class="bar">
+                <h2>Track already exists in playlist</h2>
+                <span class="close">&times;</span>
+            </div>
+            <form id="confirmAddTrack" action="/confirm-add" method="post">
+                <input type="hidden" name="track_uri">
+                <input type="hidden" name="playlist_id">
+                <button type="submit">Add Anyway</button>
+                <button type="button" id="cancelBtn">Cancel</button>
+            </form>
+        </div>
+    </div>
+    <script src="{{url_for('static', filename='script.js')}}"></script>
+{% endblock %}

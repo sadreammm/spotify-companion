@@ -1,0 +1,211 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{playlist_details[0]['playlist_name']}}
+{% endblock %}
+
+{% block h1 %}
+    {{display_name}}
+{% endblock %}
+    
+{% block main %}
+    <div class="sort sort-screen mb-5">
+        <button onclick="defaultSort()">Default Sort</button>
+        <button onclick="alphaSort()">Sort A-Z</button>
+        <button onclick="reverseAlphaSort()">Sort Z-A</button>
+        <button onclick="popSort()">Sort most pop to least</button>
+        <button onclick="reversePopSort()">Sort least pop to most</button>
+    </div>
+    <div class="sort sort-media mb-5">
+        <button onclick="defaultSort()">Default</button>
+        <button onclick="alphaSort()">A-Z</button>
+        <button onclick="reverseAlphaSort()">Z-A</button>
+        <button onclick="popSort()">most pop to least</button>
+        <button onclick="reversePopSort()">least pop to most</button>
+    </div>
+    {% for playlist in playlist_details %}
+        <div class="playlist" data-track-id="{{ playlist['playlist_id'] }}">
+            <table class="playlist-info mb-5">
+                <tr>
+                    <td>
+                        {% if playlist['playlist_image'] != none %}
+                            <img src="{{ playlist['playlist_image'] }}" alt="Playlist image" width="230" height="230">
+                        {% else %}
+                            <img src="/static/images/default.png" width="230" height="230">
+                        {% endif %}
+                    </td>
+                    <td class="hidden" width="20"></td>
+                    <td class="screen">
+                        <h1><b>{{ playlist['playlist_name'] }}</b></h1>
+                        <h3>{{playlist['description']}}</h3>
+                        <h4>{{playlist['total_tracks']}} songs</h4>
+                        <div class="owner">
+                            <h4> by {{ playlist['owner_name'] }}</h4>
+                            <img src="{{playlist['owner_image']}}" width="60" height="60">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="media mt-4">
+                        <h1><b>{{ playlist['playlist_name'] }}</b></h1>
+                        <h2>{{playlist['description']}}</h2>
+                        <h3> by {{ playlist['owner_name'] }}</h3>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    {% endfor %}
+    <ul id="playlist">
+        {% for track in playlist %}
+        <li class="song mb-4" data-track-id="{{ track['track_id'] }}">
+            {% if track['track_name'] != "" %}
+                <table border="0" class="tracks">
+                    <tr>
+                        <td>
+                            <img src="{{ track['track_image'] }}" alt="Track image" width="100" height="100">
+                        </td>
+                        <td class="hidden" width="2%"></td>
+                        <td width="80%">
+                            <h1 class="track-name"><b>{{ track['track_name'] }}</b></h1>
+                            <h3>by {{ ', '.join(track['artist_name'] )}}</h3>
+                            {% if playlist_details[0]['owner_id'] == owner_id %}
+                                <div class="media">
+                                    <p class="track-pop" hidden>{{track['popularity']}}</p>
+                                    <form action="/delete-track" method="post">
+                                    <input type="hidden" name='track_uri' value="{{track['uri']}}">
+                                    <input type="hidden" name='playlist_id' value="{{playlist_id}}">
+                                    <button type="submit" class="deleteTrackBtn">Delete</button>
+                                </form>
+                                </div>
+                            {% endif %}
+                        </td>
+                        {% if playlist_details[0]['owner_id'] == owner_id %}
+                            <td class="align-right">
+                                <p class="track-pop" hidden>{{track['popularity']}}</p>
+                                <form action="/delete-track" method="post">
+                                    <input type="hidden" name='track_uri' value="{{track['uri']}}">
+                                    <input type="hidden" name='playlist_id' value="{{playlist_id}}">
+                                    <button type="submit" class="deleteTrackBtn">Delete</button>
+                                </form>
+                            </td>
+                        {% endif %}
+                    </tr>
+                </table>
+                
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        var originalOrder = [];
+
+        function saveOriginalOrder() {
+            originalOrder = [];
+            var playlistItems = document.querySelectorAll('#playlist .song');
+            playlistItems.forEach(function(item) {
+                originalOrder.push(item.cloneNode(true)); 
+            });
+        }
+
+        function alphaSort() {
+            var playlistItems = Array.from(document.querySelectorAll('#playlist .song'));
+
+            playlistItems.sort(function(a, b) {
+                var trackNameA = a.querySelector('.track-name');
+                var trackNameB = b.querySelector('.track-name');
+                
+                if (trackNameA && trackNameB) {
+                    var nameA = trackNameA.innerText.trim().toUpperCase();
+                    var nameB = trackNameB.innerText.trim().toUpperCase();
+                    return nameA.localeCompare(nameB);
+                }
+                return 0;
+            });
+
+            var playlist = document.getElementById('playlist');
+            playlist.innerHTML = '';
+            playlistItems.forEach(function(item) {
+                playlist.appendChild(item);
+            });
+        }
+
+        function reverseAlphaSort() {
+            var playlistItems = Array.from(document.querySelectorAll('#playlist .song'));
+
+            playlistItems.sort(function(a, b) {
+                var trackNameA = a.querySelector('.track-name');
+                var trackNameB = b.querySelector('.track-name');
+                
+                if (trackNameA && trackNameB) {
+                    var nameA = trackNameA.innerText.trim().toUpperCase();
+                    var nameB = trackNameB.innerText.trim().toUpperCase();
+                    return nameB.localeCompare(nameA); 
+                }
+                return 0;
+            });
+
+            var playlist = document.getElementById('playlist');
+            playlist.innerHTML = ''; 
+            playlistItems.forEach(function(item) {
+                playlist.appendChild(item);
+            });
+        }
+
+        function popSort(){
+            var playlistItems = Array.from(document.querySelectorAll('#playlist .song'));
+
+            playlistItems.sort(function(a, b) {
+                var trackPopA = a.querySelector('.track-pop');
+                var trackPopB = b.querySelector('.track-pop');
+                
+                if (trackPopA && trackPopB) {
+                    var popA = parseInt(trackPopA.innerText);
+                    var popB = parseInt(trackPopB.innerText);
+                    return popB - popA;
+                }
+                return 0;
+            });
+            
+            var playlist = document.getElementById('playlist');
+            playlist.innerHTML = '';
+            playlistItems.forEach(function(item) {
+                playlist.appendChild(item);
+            });
+        }
+
+        function reversePopSort(){
+            var playlistItems = Array.from(document.querySelectorAll('#playlist .song'));
+
+            playlistItems.sort(function(a, b) {
+                var trackPopA = a.querySelector('.track-pop');
+                var trackPopB = b.querySelector('.track-pop');
+                
+                if (trackPopA && trackPopB) {
+                    var popA = parseInt(trackPopA.innerText);
+                    var popB = parseInt(trackPopB.innerText);
+                    return popA - popB;
+                }
+                return 0;
+            });
+
+            var playlist = document.getElementById('playlist');
+            playlist.innerHTML = '';
+            playlistItems.forEach(function(item) {
+                playlist.appendChild(item);
+            });
+        }
+
+        function defaultSort() {
+            var playlist = document.getElementById('playlist');
+            playlist.innerHTML = ''; 
+            originalOrder.forEach(function(item) {
+                playlist.appendChild(item);
+            });
+        }
+
+        window.onload = function() {
+            saveOriginalOrder();
+        };
+    </script>        
+{% endblock %}

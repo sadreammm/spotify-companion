@@ -1,0 +1,504 @@
+body{
+    background-color: #121212;
+    color: white !important;
+}
+
+nav{
+    background-color: #121212 !important;
+    justify-self: space-between !important;
+    align-items: center;
+}
+
+.navbar-brand{
+    margin-top: 3px;
+    margin-left: 15px;
+    display: inline-flex;
+}
+.navbar-brand img{
+    margin-right: 5px;
+}
+
+.navbar-dark{
+    opacity: 1 !important;
+}
+
+.nav-link{
+    color: white !important;
+    font-size: 22px;
+}
+
+
+.nav-item{
+    font-size: 20px;
+    margin-right: 15px;
+}
+
+
+.nav-link {
+    position: relative; 
+}
+
+.nav-link::after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 5px; 
+    background-color: #1ed760;
+    position: absolute;
+    bottom: 0;
+    left: 5px;
+    transition: width 0.5s;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 90%;
+}
+
+.nav-link.active{
+    font-weight:bold;
+}
+
+@media(max-width:768px) {
+    .nav-link::after {
+        display: none;
+    }
+    .navbar-brand{
+        margin-left: 10px;
+    }
+    .navbar-brand h1{
+        font-size: 35px;
+    }
+}
+
+.search{
+    border-radius: 30px;
+    width: 50%;
+    border: 1px solid transparent;
+}
+.search:focus{
+    outline: none;
+    border: 3px solid #1ed760;
+}
+
+@media(max-width:768px){
+    .search{
+        width: 90%;
+    }
+}
+
+.currently-playing .screen h1{
+    font-size: 80px;
+}
+
+.currently-playing .screen h3{
+    font-size: 30px;
+}
+.currently-playing .screen h4{
+    font-size: 30px;
+}
+
+.lyrics{
+    margin-top: 20px;
+    font-family: var(--bs-body-font-family);
+    font-size: 25px;
+}
+
+.lyrics pre{
+    white-space: pre-wrap; 
+    word-wrap: break-word;       
+    width: 100%;
+    overflow-x: auto; 
+    box-sizing: border-box;  
+    line-height: 2;
+}
+
+.currently-playing .media{
+    display: none;
+}
+
+.not-playing{
+    text-align: center;
+}
+
+.not-playing h1{
+    font-size: 80px;
+}
+
+@media(max-width:768px){
+    .currently-playing .media{
+        display: block;
+    }
+    .currently-playing {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .currently-playing .hidden{
+        display: none;
+    }
+    .currently-playing .screen{
+        display: none;
+    }
+    .currently-playing .screen h1{
+        font-size: 50px;
+    }
+    .currently-playing .screen h3{
+        font-size: 20px;
+    }
+    .currently-playing .screen h4{
+        font-size: 15px;
+    }
+    .lyrics{
+        font-size: 18px;
+        text-align: left;
+        line-height: 2;
+    } 
+    .not-playing{
+        text-align: center;
+        display: flex;
+    }
+    .not-playing h1{
+        font-size: 30px;
+    }
+}
+
+.playlist-list{
+    list-style: none;
+}
+
+.playlist-info .screen h1{
+    font-size: 50px;
+}
+
+.playlist-info .screen h3{
+    font-size: 35px;
+}
+
+.playlist-info .screen h4{
+    font-size: 25px;
+}
+
+.playlist-info .media{
+    display: none;
+}
+
+.playlist-info .owner{
+    display: flex;
+    align-items: center;
+}
+
+.playlist-info .owner img{
+    margin-left: 15px;
+    border-radius: 50px;
+}
+
+@media(max-width:768px){
+    .playlist-info .media{
+        display: block;
+    }
+    .playlist-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .playlist-info .hidden{
+        display: none;
+    }
+    .playlist-info .screen{
+        display: none;
+    }
+    .playlist-info .screen h1{
+        font-size: 30px;
+    }
+    .playlist-info .screen h3{
+        font-size: 20px;
+    }
+    .playlist-info .screen h4{
+        font-size: 15px;
+    }
+}
+
+.sort{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.sort button{
+    margin: 0 3px;
+    border-radius: 20px;
+    font-size: 12px;
+    padding: 3px 8px;
+    border: 1px solid transparent;
+}
+.sort button:hover{
+    background-color: #1ed760;
+    color: white;
+    outline: none;
+}
+.sort-media button{
+    display: none;
+}
+
+#playlist{
+    list-style: none;
+}
+
+@media(max-width:768px){
+    .sort{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .sort button{
+        margin: 0 0;
+    }
+    .sort-media button{
+        display: block;
+    }
+    .sort-screen button{
+        display: none;
+    }
+}
+
+.song h1{
+    font-size: 40px;
+}
+
+.song h3{
+    font-size: 30px;
+}
+
+@media(max-width:768px){
+    .song h1{
+        font-size: 20px;
+    }
+    
+    .song h3{
+        font-size: 16px;
+    }
+}
+
+.track .screen h1{
+    font-size: 60px;
+}
+
+.track .screen h3{
+    font-size: 40px;
+}
+
+.track .screen h4{
+    font-size: 25px;
+}
+
+.track .artist{
+    display: flex;
+    align-items: center;
+}
+
+.track .artist img{
+    margin-left: 15px;
+    border-radius: 50px;
+}
+
+.track .media{
+    display: none;
+}
+
+@media(max-width:768px){
+    .track .media{
+        display: block;
+    }
+    .track .screen{
+        display: none;
+    }
+    .track .hidden{
+        display: none;
+    }
+    .track .align-right{
+        display: none;
+    }
+    .track .screen h1{
+        font-size: 30px;
+    }
+    
+    .track .screen h3{
+        font-size: 20px;
+    }
+    
+    .track .screen h4{
+        font-size: 15px;
+    }
+    .track {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 55%;
+    top: 25%;
+    width: 30%;
+    height: 90%;
+    overflow: auto;
+    padding-top: 40px;
+}
+
+.modal-content {
+    background-color: #282727;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #000000;
+    width: 80%;
+}
+
+#confirmModal h2{
+    font-size: 20px;
+}
+
+.modal-content button{
+    border-radius: 5px;
+    background-color: white;
+    border: 1px solid transparent;
+}
+
+.modal-content button:hover{
+    background-color: #1ed760;
+    color: white;
+}
+
+#cancelBtn:hover{
+    background-color: red;
+    color: white;
+}
+
+.select-playlist{
+    border-radius: 5px;
+    border: 1px solid transparent;
+    height: 27px;
+}
+.select-playlist:focus{
+    border: 1px solid #1ed760;
+}
+
+.close {
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #1ed760;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.bar{
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+}
+
+
+.song {
+    width: 100%;
+}
+
+
+.song .align-right {
+    text-align: right;
+    width: 10%;
+}
+
+.addToPlaylistBtn,
+.deleteTrackBtn {
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid transparent;
+}
+.addToPlaylistBtn:hover{
+    background-color: #1ed760;
+    color: white;
+}
+
+.deleteTrackBtn:hover{
+    background-color: red;
+    color: white;
+}
+
+.songs .song .media{
+    display: none;
+}
+
+@media(max-width:768px){
+    .songs .song .media{
+        display: block;
+    }
+    .songs .song .align-right{
+        display: none;
+    }
+    
+}
+
+@media(max-width:768px){
+    .modal{
+        width: 50%;
+        left: 45%;
+    }
+    .modal-content button{
+        margin: 5px 5px;
+    }
+}
+
+.notification{
+    display: none;
+    position: fixed;
+    left: 45%;
+    top: 90%;
+    width: 10%;
+    height: 5%;
+    padding: 5px 5px;
+    background-color: #282727d7;
+    border-radius: 15px;
+    border: 1px solid #000000;
+    text-align: center;
+}
+
+@media(max-width:768px){
+    .notification{
+        width:50%;
+        height: 5%;
+        left:30%;
+    }
+}
+
+.tracks h1{
+    font-size: 30px;
+}
+
+.tracks h3{
+    font-size: 20px;
+}
+
+.tracks .media{
+    display: none;
+}
